@@ -1,6 +1,6 @@
 module.exports = {
     notes: async (parent, args, {models}) => {
-        return await models.Note.find();
+        return await models.Note.find().limit(100); // 데이터 제한, 쿼리 깊이 제한은 x
     },
 
     note: async (parent, args, {models}) => {

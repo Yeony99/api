@@ -1,4 +1,6 @@
 const cors = require('cors'); //cors 활성화
+const depthLimit = require('graphql-depth-limit'); // 데이터 제한. 중첩쿼리 방지, 쿼리 깊이 제한
+const { createComplexityLimitRule } = require('graphql-validation-complexity');
 const helmet = require('helmet'); //소규모 보안 지향 미들웨어 함수 모음. 애플리케이션의 HTTP 헤더 보안 강화.
 const express = require('express');
 //get apollo-server
@@ -31,14 +33,15 @@ db.connect(DB_HOST);
 const server = new ApolloServer({
   typeDefs,
   resolvers,
+  //ApolloServer가 validationRules 포함하도록 업데이트
+  validationRules : [depthLimit(5), createComplexityLimitRule(1000)],
   context: ({req}) => {
     //헤더에서 사용자 토큰 가져오기
     const token = req.headers.authorization;
     //토큰에서 사용자 얻기
     const user = getUser(token);
-
     //콘솔에 user 로깅
-    console.log(user);
+ //   console.log(user);
 
     //context에 db models 추가, user 추가
     return {models, user};
