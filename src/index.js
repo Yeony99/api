@@ -30,9 +30,17 @@ db.connect(DB_HOST);
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  context: () => {
-    //context에 db models 추가
-    return {models};
+  context: ({req}) => {
+    //헤더에서 사용자 토큰 가져오기
+    const token = req.headers.authorization;
+    //토큰에서 사용자 얻기
+    const user = getUser(token);
+
+    //콘솔에 user 로깅
+    console.log(user);
+
+    //context에 db models 추가, user 추가
+    return {models, user};
   }
 });
 
@@ -44,4 +52,19 @@ console.log(
   `GraphQL server running at http://localhost:${port}${server.graphqlPath}`
   )
 );
+
+const jwt = require('jsonwebtoken');
+
+//JWT에서 사용자 정보 가져오기
+const getUser = token => {
+  if(token) {
+    try {
+      //토큰에서 얻은 사용자 정보 반환
+      return jwt.verify(token, process.env.JWT_SECRET);
+    } catch (err) {
+      //토큰에 문제 있으면 에러 던지기
+      throw new Error('Session invalid');
+    }
+  }
+};
 

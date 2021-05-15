@@ -1,21 +1,38 @@
-const {gql} = require('apollo-server-express');
+const { gql } = require('apollo-server-express');
 
-//기본 그래프 QL 애플리케이션 설정 
 //GQL API 적용 - 스키마
 module.exports = gql`
-type Note {
-  id: ID!
-  content: String!
-  author:String!
-}
-type Query {
-  hello: String!
-  notes: [Note!]!
-  note(id: ID!): Note!
-}
-
-type Mutation {
-  newNote(content: String!): Note!
-}
+    scalar DateTime
+    type Note {
+        id: ID!
+        content: String!
+        author:User!
+        createdAt: DateTime!
+        updatedAt: DateTime!
+        favoriteCount: Int!
+        favoritedBy: [User!]
+    }
+    type User {
+        id: ID!
+        username: String!
+        email: String!
+        avatar: String
+        notes: [Note!]!
+        favorites: [Note!]!
+    },
+    type Query {
+        notes: [Note!]!
+        note(id:ID!):Note!
+        user(username:String!): User
+        users: [User!]!
+        me: User!
+    },
+    type Mutation {
+        newNote(content: String!): Note!
+        updateNote(id: ID!, content:String!):Note!
+        deleteNote(id:ID!): Boolean!
+        signUp(username: String!, email: String!, password: String!): String!
+        signIn(username: String!, email: String!, password: String!): String!
+        toggleFavorite(id: ID!): Note!
+    }
 `;
-   
