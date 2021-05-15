@@ -1,6 +1,5 @@
-// index.js
-// This is the main entry point of our application
-
+const cors = require('cors'); //cors 활성화
+const helmet = require('helmet'); //소규모 보안 지향 미들웨어 함수 모음. 애플리케이션의 HTTP 헤더 보안 강화.
 const express = require('express');
 //get apollo-server
 const { ApolloServer} = require('apollo-server-express');
@@ -21,6 +20,8 @@ const DB_HOST = process.env.DB_HOST;
 
 
 const app = express();
+app.use(helmet());
+app.use(cors()); //모든 도메인에서 원본간 요청이 가능.
 
 //DB 연결
 db.connect(DB_HOST);
