@@ -10,7 +10,7 @@ module.exports = gql`
         createdAt: DateTime!
         updatedAt: DateTime!
         favoriteCount: Int!
-        favoritedBy: [User!]
+        favoritedBy: [User]
     }
     type User {
         id: ID!
@@ -29,7 +29,7 @@ module.exports = gql`
         noteFeed(cursor: String) : NoteFeed
     },
     type Mutation {
-        newNote(content: String!): Note!
+        newNote(content: String!): Note
         updateNote(id: ID!, content:String!):Note!
         deleteNote(id:ID!): Boolean!
         signUp(username: String!, email: String!, password: String!): String!

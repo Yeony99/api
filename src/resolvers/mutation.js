@@ -20,7 +20,8 @@ module.exports = {
         return await models.Note.create({
             content: args.content,
             //author의 몽고 ID 참조
-            author: mongoose.Types.ObjectId(user.id)
+            author: mongoose.Types.ObjectId(user.id),
+            favoriteCount: 0
         });
     },
     deleteNote: async(parent, {id}, {models, user}) => {
@@ -37,7 +38,7 @@ module.exports = {
         }
         try {
             //문제 없으면 note 삭제
-            await models.Note.findOneAndRemove({_id: id});
+            await note.remove();
             return true;
         } catch (err) {
             //오류 있으면 false 반환
