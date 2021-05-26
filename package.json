@@ -8,6 +8,7 @@
     "dev": "nodemon src/index.js",
     "final": "nodemon final/index.js",
     "seed": "node final/util/seed/index.js",
+    "heroku-postbuild": "npm run build",
     "lint": "eslint \"src/**/*.js\""
   },
   "repository": {
