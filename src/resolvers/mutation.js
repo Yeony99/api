@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const bcryptjs = require('bcryptjs');
+const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken'); 
 const {
     AuthenticationError,
@@ -77,7 +77,7 @@ module.exports = {
         //이메일 주소 스트링 처리
         email = email.trim().toLowerCase();
         //비밀번호해싱
-        const hashed = await bcryptjs.hash(password, 10);
+        const hashed = await bcrypt.hash(password, 10);
         //gravatar URL 생성
         const avatar = gravatar(email);
 
@@ -112,7 +112,7 @@ module.exports = {
             throw new AuthenticationError('Error signing in');
         }
         //비밀 번호 불일치 - 인증 에러 던지기
-        const valid = await bcryptjs.compare(password, user.password);
+        const valid = await bcrypt.compare(password, user.password);
         if(!valid) {
             throw new AuthenticationError('Error signing in');
         }
